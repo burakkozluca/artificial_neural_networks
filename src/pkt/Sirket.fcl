@@ -2,8 +2,8 @@ FUNCTION_BLOCK Sirket
 
 VAR_INPUT
 	isTecrubesi : REAL;
-	cinsiyet : REAL;
 	yas : REAL;
+	cinsiyet : REAL;
 END_VAR
 
 VAR_OUTPUT
@@ -18,13 +18,13 @@ END_FUZZIFY
 
 FUZZIFY yas
 	TERM genc := (0,1)(20,0);
-	TERM yetiskin := (0,0)(20,1)(40,0);
+	TERM yetiskin := (20,0)(20,1)(40,0);
 	TERM yasli := trape 25 35 60 100;
 END_FUZZIFY
 
 FUZZIFY cinsiyet
-	TERM erkek := (0,1);
-	TERM kadin := (1,1);
+	TERM erkek := 0;
+	TERM kadin := 1;
 END_FUZZIFY
 
 DEFUZZIFY parcaSayisi
@@ -32,7 +32,8 @@ DEFUZZIFY parcaSayisi
 	TERM Az := trian 20 40 60;
 	TERM Orta := (40,0)(60,1)(90,0);
 	TERM uzun := (60,0)(90,1)(100,0);
-	TERM cokUzun := trape 90 100 145 145;
+	TERM cokUzun := (90,0)(100,1)(120,0);
+	TERM cokcokparca := trape 100 120 140 140;
 	METHOD : COG;
 	DEFAULT := 40;
 END_DEFUZZIFY
@@ -42,15 +43,24 @@ RULEBLOCK kuralblok1
 	ACT : MIN;
 	ACCU : MAX;
 	
-	RULE 1: IF isTecrubesi IS az AND yas IS genc THEN parcaSayisi IS cokAz;
-	RULE 2: IF isTecrubesi IS az AND yas IS yetiskin THEN parcaSayisi IS Az;
-	RULE 3: IF isTecrubesi IS az AND yas IS yasli THEN parcaSayisi IS Orta;
-	RULE 4: IF isTecrubesi IS orta AND yas IS genc THEN parcaSayisi IS Az;
-	RULE 5: IF isTecrubesi IS orta AND yas IS yetiskin THEN parcaSayisi IS Orta;
-	RULE 6: IF isTecrubesi IS orta AND yas IS yasli THEN parcaSayisi IS uzun;
-	RULE 7: IF isTecrubesi IS fazla AND yas IS genc THEN parcaSayisi IS Orta;
-	RULE 8: IF isTecrubesi IS fazla AND yas IS yetiskin THEN parcaSayisi IS uzun;
-	RULE 9: IF isTecrubesi IS fazla AND yas IS yasli THEN parcaSayisi IS cokUzun;
+	RULE 1: IF isTecrubesi IS az AND yas IS genc AND cinsiyet IS erkek THEN parcaSayisi IS Az;
+	RULE 2: IF isTecrubesi IS az AND yas IS yetiskin AND cinsiyet IS erkek THEN parcaSayisi IS Orta;
+	RULE 3: IF isTecrubesi IS az AND yas IS yasli AND cinsiyet IS erkek THEN parcaSayisi IS uzun;
+	RULE 4: IF isTecrubesi IS orta AND yas IS genc AND cinsiyet IS erkek THEN parcaSayisi IS Orta;
+	RULE 5: IF isTecrubesi IS orta AND yas IS yetiskin AND cinsiyet IS erkek THEN parcaSayisi IS uzun;
+	RULE 6: IF isTecrubesi IS orta AND yas IS yasli AND cinsiyet IS erkek THEN parcaSayisi IS cokUzun;
+	RULE 7: IF isTecrubesi IS fazla AND yas IS genc AND cinsiyet IS erkek THEN parcaSayisi IS uzun;
+	RULE 8: IF isTecrubesi IS fazla AND yas IS yetiskin AND cinsiyet IS erkek THEN parcaSayisi IS cokUzun;
+	RULE 9: IF isTecrubesi IS fazla AND yas IS yasli AND cinsiyet IS erkek THEN parcaSayisi IS cokcokparca;
+	RULE 10: IF isTecrubesi IS az AND yas IS genc AND cinsiyet IS kadin THEN parcaSayisi IS cokAz;
+	RULE 11: IF isTecrubesi IS az AND yas IS yetiskin AND cinsiyet IS kadin THEN parcaSayisi IS Az;
+	RULE 12: IF isTecrubesi IS az AND yas IS yasli AND cinsiyet IS kadin THEN parcaSayisi IS Orta;
+	RULE 13: IF isTecrubesi IS orta AND yas IS genc AND cinsiyet IS kadin THEN parcaSayisi IS Az;
+	RULE 14: IF isTecrubesi IS orta AND yas IS yetiskin AND cinsiyet IS kadin THEN parcaSayisi IS Orta;
+	RULE 15: IF isTecrubesi IS orta AND yas IS yasli AND cinsiyet IS kadin THEN parcaSayisi IS uzun;
+	RULE 16: IF isTecrubesi IS fazla AND yas IS genc AND cinsiyet IS kadin THEN parcaSayisi IS Orta;
+	RULE 17: IF isTecrubesi IS fazla AND yas IS yetiskin AND cinsiyet IS kadin THEN parcaSayisi IS uzun;
+	RULE 19: IF isTecrubesi IS fazla AND yas IS yasli AND cinsiyet IS kadin THEN parcaSayisi IS cokUzun;
 
 END_RULEBLOCK
 

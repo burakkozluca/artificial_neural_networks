@@ -9,15 +9,18 @@ public class ParcaSayisi {
 	private FIS fis;
 	private double yas;
 	private double isTecrubesi;
+	private double cinsiyet;
 	
-	public ParcaSayisi(double yas,double isTecrubesi) throws URISyntaxException {
+	public ParcaSayisi(double yas,double isTecrubesi,double cinsiyet) throws URISyntaxException {
 		this.yas = yas;
 		this.isTecrubesi = isTecrubesi;
+		this.cinsiyet = cinsiyet;
 		
 		File dosya = new File(getClass().getResource("Sirket.fcl").toURI());
 		fis = FIS.load(dosya.getPath());
 		fis.setVariable("yas", yas);
 		fis.setVariable("isTecrubesi", isTecrubesi);
+		fis.setVariable("cinsiyet", cinsiyet);
 		fis.evaluate();
 	}
 	@Override
